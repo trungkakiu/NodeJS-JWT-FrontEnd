@@ -1,9 +1,9 @@
+ 
+import React, { useState } from 'react'
 
-import React, { Children, useContext, useState } from 'react'
+const UserContext = React.createContext ({name: "", auth: false});
 
-const UserContext = React.useContext({name: "", auth: false});
-
-const UserProvider = ( {Children} ) =>{
+const UserProvider = ({ children }) => {
 
     const [ user, setUsers] = useState({
 
@@ -12,8 +12,14 @@ const UserProvider = ( {Children} ) =>{
         account: {}
     })
 
+    
     const loginContext = (userData) =>{
-        setUsers(userData);
+       
+        if(userData){
+            setUsers(userData);
+        }else{
+            console.error("Not ok!");
+        }
     }
 
     const logoutContext = () =>{
@@ -25,8 +31,8 @@ const UserProvider = ( {Children} ) =>{
     }
 
     return (
-        <UserContext.Provider value= {{user, loginContext, loginContext}}>
-            {Children}
+        <UserContext.Provider value= {{user, loginContext, logoutContext}}>
+            { children}
         </UserContext.Provider>
     );
 }

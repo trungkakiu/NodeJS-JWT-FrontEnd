@@ -1,46 +1,62 @@
-// App.js
 import React, { useEffect, useState } from 'react';
 import UserHome from '../src/Components/UserHome/UserHome';
 import PrivateRoutes from '../src/Routes/PrivateRoutes';
 import PublicRoutes from '../src/Routes/PublicRoutes';
-import Nav from '../src/Components/Navigation/Nav'
-// import NavNoAuthenticate from '../src/Components/Navigation/NavNoAuthenticate'
+import Nav from '../src/Routes/Nav'; 
 import 'bootstrap/dist/css/bootstrap.min.css';
-import _ from 'lodash';
 import {
   BrowserRouter as Router,
   Route,
+  useLocation,
+  useHistory,
 } from 'react-router-dom';
-import { ToastContainer, toast } from 'react-toastify';
+import '../src/App.scss';
 import 'react-toastify/dist/ReactToastify.css';
+import RouteApi from './Service/RouteApi';
 
 function App() {
-  const [account, setaccount] = useState({});
-  useEffect(()=>{
-    let session = sessionStorage.getItem('account');
-    console.log(sessionStorage.getItem('account'));
-    if(session){
-      let parsedAccount = JSON.parse(session);
-      console.log("Parsed Account Data: ", parsedAccount);
-      setaccount(parsedAccount)
-      
-    }
-  },[]);
-  return (
-    <Router>
-      <div className='Header-container'>
-      {
-        account && !_.isEmpty(account) && account.isAuthenticate  && <Nav /> 
+  const [account, setAccount] = useState({});
+  const infomt = {
+    stdname: '',
+    MaSV: ''
+  }
+  const [userinfo, setuserinfo] = useState(infomt);
 
-      }
-      </div>
+  useEffect(() => {
+    let session = sessionStorage.getItem('account');
+    if (session) {
+      let parsedAccount = JSON.parse(session);
+      setAccount(parsedAccount);
+      takeinfo();
+    }
+  }, []);
+
+  const takeinfo = async () => {
+    const info = await RouteApi.Leckinfo();
+    setuserinfo({
+      stdname: info.data.ED.name,
+      MaSV: info.data.ED.MaSV
+    });
+  };
+
+  let location = useLocation();
+  const isAuthPage = location.pathname === '/Login' || location.pathname === '/register';
+
+  return (
+    <div className={isAuthPage ? '' : 'App-grid'}>
+      {!isAuthPage && <Nav userinfo={userinfo} />} 
       <div className='Body-container'>
-      <PublicRoutes/>
-      <PrivateRoutes path={'/UserHome'} component={UserHome}/>
-      
+        <PublicRoutes />
+        <PrivateRoutes path={'/UserHome'} component={UserHome} />
       </div>
-    </Router>
+    </div>
   );
 }
 
-export default App;
+export default function AppWithRouter() {
+  return (
+    <Router>
+      <App />
+    </Router>
+  );
+}

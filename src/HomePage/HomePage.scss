@@ -1,0 +1,130 @@
+.app-container{
+
+    .Nav-bar{
+        height: 50px;
+        margin-left: 271px;
+        background-color:#f8f9fa;
+        max-width: 1264px;
+        width: 1264px;
+        border-bottom: 1px black dashed ;
+        position: fixed;
+        z-index: 999; 
+        margin-bottom: 20px;
+        i{
+            font-size: 35px;
+            margin-top: 7px;
+            margin-left: 10px;
+        }
+    }
+    .right-content{
+        
+        margin-left: 273px;
+        max-width: 1264px;
+        width: 1264px;
+        overflow-y: auto;
+        height: 100vh;
+        box-sizing: border-box;
+        .slider-wrapper {
+            // margin-top: 10px;
+            margin-top: 85px;
+            margin-left: 30px;
+            padding: 0px;
+            background-color: rgb(80, 42, 42);
+            border-radius: 15px;
+            height: 200px;
+            width: 1191px;
+           
+            .slick-dots {
+                position: absolute;
+                bottom: 10px; 
+                left: 50%;
+                transform: translateX(-50%);
+                z-index: 1;
+              
+            }
+            .slick-dots li button:before{
+                font-size: 10px;
+                color: rgb(208, 250, 100);
+            }
+            .slick-slide img {
+                width: 1191px;
+                height: 207px;
+                border-radius: 15px;
+                object-fit: cover;
+            }
+           
+        }
+        .App-theme-container{
+        
+            display: flex; 
+            margin-left: 13px;
+         
+          margin-top: 22px;
+          .App-theme-picture-1{
+            background-color: rgb(143, 226, 98);
+          }
+          .App-theme-picture-2{
+            background-color: rgb(98, 173, 226);
+          }
+          .App-theme-picture-3{
+            background-color: rgb(226, 98, 173);
+          }
+          .App-theme-picture-4{
+            background-color: rgb(175, 38, 38);
+          }
+          .App-theme{
+           
+            margin: 5px;
+            border-radius: 15px;
+            width: 290px; 
+            height: 200px; 
+            
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+
+            .overlay-content{
+                margin-left: 10px;
+                filter: blur(3px);
+                font-weight: 650;
+                cursor: pointer;
+                transition: transform  0.5s ease,filter 0.5s ease;
+
+            }
+            .overlay-content:hover{
+                transform: scale(1.05);
+                filter: blur(0px);
+            }
+            img{
+                width: 290px;
+                height: 200px;
+                border-radius: 15px;
+                filter: blur(3px);
+                transition: transform  0.5s ease,filter 0.5s ease;
+                 
+            }
+            img:hover{
+                transform: scale(1.08);
+                filter: blur(0px);
+             
+            }
+
+        }
+        }
+        .App-Header-dashborad{
+            width: 1270px;
+
+            .App-table{
+                width: 1190px;
+                margin-top: 25px;
+                margin-left: 22px;
+               
+            }
+        }
+       
+      
+    }
+    
+}
+
+

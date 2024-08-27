@@ -5,12 +5,14 @@ import { ToastContainer, toast } from 'react-toastify';
 import RouteApi from '../../Service/RouteApi';
 import 'react-toastify/dist/ReactToastify.css';
 import { UserContext } from '../../Context/useContext';
+import Cookies from 'js-cookie';
 const { loginUser } = RouteApi;
 
 
 
 const Login = (props) =>{
     let history = useHistory();
+    const { loginContext } = useContext(UserContext);
     const [EmailorUserName, setEmailorUserName] = useState("");
     const [Password, setPassword] = useState("");
     const defaultvalidinput = {
@@ -18,16 +20,16 @@ const Login = (props) =>{
         isValidpassword: true
     }
     const [ojbvaliddata, setojbvaliddata] = useState(defaultvalidinput);
-    const { loginContext } = useContext(UserContext);
+    
     const handleCreateNew = () =>{
         history.push("/register");
    }
    
    useEffect(() => {
     let session = sessionStorage.getItem("account");
-
-    if (session) {
-        history.push('/Home');
+    let jwtToken = Cookies.get('jwt');
+    if (session && jwtToken) {
+        history.push('/');
     }
 }, [history]);
 
@@ -49,17 +51,20 @@ const Login = (props) =>{
         toast.success("Login success!");
         let UserData = {
             isAuthenticate: true,
-            token: "Face token"
+            token: responesedata.ED
          } 
+        console.log("userdata: ",UserData)
         sessionStorage.setItem('account', JSON.stringify(UserData));
-        loginContext(UserData);
+       
+        await loginContext(UserData);
+
         setTimeout(() => {
-            history.push("/UserHome");
+            history.push("/");
             window.location.reload();
         }, 2000);
      }
      if(responesedata.EC === -1){
-        toast.error("Your email incorrect!")
+        toast.error("Your email have eadly!")
      }
      if(responesedata.EC === -2){
         toast.error("invalid password!")

@@ -41,7 +41,6 @@ const loginUser = async (EmailorUserName, Password) => {
     try {
         const response = await axios.post("http://localhost:8081/api/v1/Login", 
             { EmailorUserName, Password }, { withCredentials: true }
-        
         );
         const data = response.data;
      
@@ -56,7 +55,6 @@ const loginUser = async (EmailorUserName, Password) => {
 const fetchAllUser = async(page, limit)=>{
     try{
         const response = await axios.get(`http://localhost:8081/api/v1/Read?page=${page}&limit=${limit}`);
-      
         return response; 
     }catch(e){
         console.log(e)
@@ -64,6 +62,32 @@ const fetchAllUser = async(page, limit)=>{
         return;
     }
 }
+
+const takeListClasses = async () => {
+    try {
+        const response = await axios.get("http://localhost:8081/api/v1/Readclasse", {
+            withCredentials: true
+        });
+        return response;
+    } catch (error) {
+        console.log(error);
+        toast.error("An error occurred during fetchuser");
+        return;
+    }
+};
+
+const Leckinfo = async () => {
+    try {
+        const response = await axios.get("http://localhost:8081/api/v1/infomation", {
+            withCredentials: true
+        });
+        return response;
+    } catch (error) {
+        console.log(error);
+        toast.error("An error occurred during fetchuser");
+        return;
+    }
+};
 
 const deleteUser = async (userID) =>{
     try {
@@ -93,5 +117,5 @@ const oldPasswordConfirm = async (oldpassword, userId) =>{
 
 
 export default {
-    loginUser, registerUser, fetchAllUser, deleteUser, editUser, oldPasswordConfirm, CreateUser
+    loginUser, registerUser, fetchAllUser, deleteUser, editUser, oldPasswordConfirm, CreateUser,takeListClasses, Leckinfo
 }

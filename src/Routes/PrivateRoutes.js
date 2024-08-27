@@ -5,25 +5,29 @@ import {
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 import React, { useContext, useEffect, useState } from 'react';
 import { UserContext } from '../Context/useContext';
+import Cookies from 'js-cookie';
 
-
-const PrivateRoutes = (props) =>{
+const PrivateRoutes = ({ path, component }) => {
     let history = useHistory();
     const { user } = useContext(UserContext);
-    useEffect(()=>{
-        console.log("Check context: ", user )
-        let session = sessionStorage.getItem('account');
-        console.log(sessionStorage.getItem('account'));
-        if(!session){
-            history.push('/Login');
-        }
-      },[]);
-
+  
+    useEffect(() => {
+      console.log("Check context: ", user);
+      let session = sessionStorage.getItem('account');
+      console.log(session);
+  
+      // Kiểm tra jwt cookie
+      let jwtToken = Cookies.get('jwt');
+      if (!session || !jwtToken) {
+        history.push('/Login');
+      }
+    }, [history, user]);
+  
     return (
-        <>
-            <Route path={props.path} component={props.component}/>
-        </>
-    )
-}
-
-export default PrivateRoutes;
+      <>
+        <Route path={path} component={component} />
+      </>
+    );
+  };
+  
+  export default PrivateRoutes;
