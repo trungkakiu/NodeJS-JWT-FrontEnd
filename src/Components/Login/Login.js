@@ -1,10 +1,10 @@
 import './Login.scss'
 import { useContext, useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
+import { Redirect, useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 import { ToastContainer, toast } from 'react-toastify';
 import RouteApi from '../../Service/RouteApi';
 import 'react-toastify/dist/ReactToastify.css';
-import { UserContext } from '../../Context/useContext';
+import { AuthContext } from '../../Context/Authenticate-context';
 import Cookies from 'js-cookie';
 const { loginUser } = RouteApi;
 
@@ -12,7 +12,7 @@ const { loginUser } = RouteApi;
 
 const Login = (props) =>{
     let history = useHistory();
-    const { loginContext } = useContext(UserContext);
+    const { login, authState  } = useContext(AuthContext);
     const [EmailorUserName, setEmailorUserName] = useState("");
     const [Password, setPassword] = useState("");
     const defaultvalidinput = {
@@ -24,16 +24,9 @@ const Login = (props) =>{
     const handleCreateNew = () =>{
         history.push("/register");
    }
-   
-   useEffect(() => {
-    let session = sessionStorage.getItem("account");
-    let jwtToken = Cookies.get('jwt');
-    if (session && jwtToken) {
-        history.push('/');
-    }
-}, [history]);
 
    const handleLogin = async() =>{
+
     setojbvaliddata(defaultvalidinput);
     if(!EmailorUserName){
         setojbvaliddata({...defaultvalidinput, isValidemail:false});
@@ -48,31 +41,36 @@ const Login = (props) =>{
      let responesedata =await loginUser(EmailorUserName, Password);
      
      if(responesedata.EC === 0 ){
-        toast.success("Login success!");
         let UserData = {
             isAuthenticate: true,
-            token: responesedata.ED
-         } 
-        console.log("userdata: ",UserData)
+            token: responesedata.ED.Access_token,
+            data: responesedata.ED.data,
+          };
+      
+        toast.success("Login success!");
         sessionStorage.setItem('account', JSON.stringify(UserData));
-       
-        await loginContext(UserData);
-
+        login(UserData.token, UserData.data);
         setTimeout(() => {
             history.push("/");
-            window.location.reload();
-        }, 2000);
+        }, 1000);
      }
-     if(responesedata.EC === -1){
-        toast.error("Your email have eadly!")
+     if(responesedata.EC === -105){
+        toast.error("Invalid email!")
+        setojbvaliddata({...defaultvalidinput, isValidemail:false});
+        return;
      }
-     if(responesedata.EC === -2){
+     if(responesedata.EC === -104){
         toast.error("invalid password!")
+        setojbvaliddata({...defaultvalidinput, isValidpassword: false});
+        return;
      }
    }
    
+   useEffect(() => {
+    console.log("State changed: ", authState);
+  }, [authState]);
+
     return (
-        
         <div className='Background'>
             <div className="login-container container">
             <div className="Login-content row">
@@ -99,7 +97,6 @@ const Login = (props) =>{
                     <div className='text-center'>
                     <button className='btn btn-success'onClick={() => handleCreateNew()} >Create new account</button>
                     </div>
-                    
                 </div>
             </div>
         </div>

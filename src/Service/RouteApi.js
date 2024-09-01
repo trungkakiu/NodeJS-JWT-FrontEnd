@@ -63,11 +63,12 @@ const fetchAllUser = async(page, limit)=>{
     }
 }
 
-const takeListClasses = async () => {
+const takeListClasses  = async () => { // lay thong tin ve lop hoc phan cua nguoi dung
     try {
         const response = await axios.get("http://localhost:8081/api/v1/Readclasse", {
             withCredentials: true
         });
+        console.log("classlist: ", response)
         return response;
     } catch (error) {
         console.log(error);
@@ -76,11 +77,12 @@ const takeListClasses = async () => {
     }
 };
 
-const Leckinfo = async () => {
+const Leckinfo = async () => { // lay thong tin ve nguoi dung co the thay the bang useContext
     try {
         const response = await axios.get("http://localhost:8081/api/v1/infomation", {
             withCredentials: true
         });
+        console.log("leckinfo: ", response)
         return response;
     } catch (error) {
         console.log(error);
@@ -89,7 +91,7 @@ const Leckinfo = async () => {
     }
 };
 
-const deleteUser = async (userID) =>{
+const deleteUser = async (userID) =>{ // Xoa nguoi dung, chi su dung truoc ban V0.0.1
     try {
         const response = await axios.delete(`http://localhost:8081/api/v1/Delete`, {
             data: { id: userID }, withCredentials: true 

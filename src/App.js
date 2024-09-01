@@ -1,26 +1,22 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import UserHome from '../src/Components/UserHome/UserHome';
 import PrivateRoutes from '../src/Routes/PrivateRoutes';
 import PublicRoutes from '../src/Routes/PublicRoutes';
 import Nav from '../src/Routes/Nav'; 
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {
-  BrowserRouter as Router,
-  Route,
-  useLocation,
-  useHistory,
-} from 'react-router-dom';
+import { BrowserRouter as Router, useLocation } from 'react-router-dom';
 import '../src/App.scss';
 import 'react-toastify/dist/ReactToastify.css';
 import RouteApi from './Service/RouteApi';
+import HomePage from './HomePage/HomePage';
+import { Rings } from 'react-loader-spinner';
+import { AuthContext } from './Context/Authenticate-context';
 
 function App() {
   const [account, setAccount] = useState({});
-  const infomt = {
-    stdname: '',
-    MaSV: ''
-  }
+  const infomt = { stdname: '', MaSV: '' };
   const [userinfo, setuserinfo] = useState(infomt);
+  const { authState } = useContext(AuthContext);
 
   useEffect(() => {
     let session = sessionStorage.getItem('account');
@@ -46,8 +42,30 @@ function App() {
     <div className={isAuthPage ? '' : 'App-grid'}>
       {!isAuthPage && <Nav userinfo={userinfo} />} 
       <div className='Body-container'>
-        <PublicRoutes />
-        <PrivateRoutes path={'/UserHome'} component={UserHome} />
+       <PublicRoutes />
+        {authState.isLoading ? (
+          <div className='Loading-page'>
+            <Rings
+              height="80"
+              width="80"
+              radius="9"
+              color="blue"
+              ariaLabel="loading"
+              wrapperStyle={{ margin: 'auto' }} 
+              wrapperClass=""
+            />
+          </div>
+        ) : (
+          <div>
+          
+            {authState.isAuthenticate && (
+              <>
+                <PrivateRoutes path={'/UserHome'} component={UserHome} />
+                <PrivateRoutes path={'/Home'} component={HomePage} />
+              </>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

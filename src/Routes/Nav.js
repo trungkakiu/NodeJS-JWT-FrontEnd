@@ -3,8 +3,12 @@ import { Link, NavLink } from 'react-router-dom';
 import beelogo from '../HomePage/Scrourcedata/Beelogo.png';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './Nav.scss'; 
+import { useContext } from 'react';
+import { AuthContext } from '../Context/Authenticate-context';
 
 const Nav = ({ userinfo }) => {
+  const { authState } = useContext(AuthContext);
+
   return (
     <div className='left-content shadow-sm'>
       <div className='App-Header'>
@@ -24,21 +28,20 @@ const Nav = ({ userinfo }) => {
         </div>
         
       </div>
-
       <div className='student'>
         <img src={beelogo} alt='beelogo' />
         <div className='info flex'>
-          <h8 className='Name'>{userinfo.stdname}</h8>
-          <small className='MHS'>{userinfo.MaSV}</small>
+          <h8 className='Name'>{authState.data.name}</h8>
+          <small className='MHS'>{authState.data.MaSV}</small>
         </div>
         <div className='setting-student'>
-          {/* Các thiết lập hoặc thông tin bổ sung */}
+         
         </div>
       </div>
 
       <div className='App-menu'>
         <div className='learning-otp'>
-          {/* Thêm các menu khác nếu cần */}
+         
         </div>
       </div>
     </div>
