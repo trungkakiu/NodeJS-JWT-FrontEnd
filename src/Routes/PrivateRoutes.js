@@ -3,11 +3,11 @@ import {
   Route,
   Redirect
 } from 'react-router-dom';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext } from 'react';
 import { AuthContext } from '../Context/Authenticate-context';
 
 const PrivateRoutes = ({ path, component }) => {
-  const { authState } = useContext(AuthContext); // Sử dụng AuthContext
+  const { authState } = useContext(AuthContext); 
 
   if (authState && authState.isAuthenticate) {
     return <Route path={path} component={component} />;

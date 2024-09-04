@@ -1,7 +1,13 @@
-.Loading-page{
-    min-width: 100vh;
-    display:flex ;
-    flex-direction:column ;
+.Loading-page {
+    position: fixed; 
+    top: 50%;       
+    left: 50%;    
+    transform: translate(-50%, -50%); 
+    width: 100vw;   
+    height: 100vh; 
+    display: flex;   
     justify-content: center;
     align-items: center;
+    z-index: 9999;  
+    background-color: rgb(255, 255, 255);
 }

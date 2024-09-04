@@ -1,8 +1,9 @@
 import axios from 'axios';
+import apiClient from './ApiClient';
 import {  toast } from 'react-toastify';
 
 const registerUser = async(EmailorUserName, Password) => {
-    return await axios.post("http://localhost:8081/api/v1/Register", { EmailorUserName, Password })
+    return await apiClient.post("http://localhost:8081/api/v1/Register", { EmailorUserName, Password })
     .then(response => {
         return response;
     })
@@ -13,7 +14,7 @@ const registerUser = async(EmailorUserName, Password) => {
 }
 
 const CreateUser = async(EmailorUserName, Password) => {
-    return await axios.post("http://localhost:8081/api/v1/CreateUser", { EmailorUserName, Password },{withCredentials: true})
+    return await apiClient.post("http://localhost:8081/api/v1/CreateUser", { EmailorUserName, Password },{withCredentials: true})
     .then(response => {
         return response;
     })
@@ -26,7 +27,7 @@ const CreateUser = async(EmailorUserName, Password) => {
 
 const editUser = async (userdata) =>{
     try {
-        const response = await axios.put("http://localhost:8081/api/v1/Update", { userdata},   { withCredentials: true });
+        const response = await apiClient.put("http://localhost:8081/api/v1/Update", { userdata},   { withCredentials: true });
         const data = response.data;
         console.log("data:",data);
         return data; 
@@ -39,7 +40,7 @@ const editUser = async (userdata) =>{
 }
 const loginUser = async (EmailorUserName, Password) => {
     try {
-        const response = await axios.post("http://localhost:8081/api/v1/Login", 
+        const response = await apiClient.post("http://localhost:8081/api/v1/Login", 
             { EmailorUserName, Password }, { withCredentials: true }
         );
         const data = response.data;
@@ -54,7 +55,7 @@ const loginUser = async (EmailorUserName, Password) => {
 
 const fetchAllUser = async(page, limit)=>{
     try{
-        const response = await axios.get(`http://localhost:8081/api/v1/Read?page=${page}&limit=${limit}`);
+        const response = await apiClient.get(`http://localhost:8081/api/v1/Read?page=${page}&limit=${limit}`);
         return response; 
     }catch(e){
         console.log(e)
@@ -65,7 +66,7 @@ const fetchAllUser = async(page, limit)=>{
 
 const takeListClasses  = async () => { // lay thong tin ve lop hoc phan cua nguoi dung
     try {
-        const response = await axios.get("http://localhost:8081/api/v1/Readclasse", {
+        const response = await apiClient.get("http://localhost:8081/api/v1/Readclasse", {
             withCredentials: true
         });
         console.log("classlist: ", response)
@@ -79,7 +80,7 @@ const takeListClasses  = async () => { // lay thong tin ve lop hoc phan cua nguo
 
 const Leckinfo = async () => { // lay thong tin ve nguoi dung co the thay the bang useContext
     try {
-        const response = await axios.get("http://localhost:8081/api/v1/infomation", {
+        const response = await apiClient.get("http://localhost:8081/api/v1/infomation", {
             withCredentials: true
         });
         console.log("leckinfo: ", response)
@@ -93,7 +94,7 @@ const Leckinfo = async () => { // lay thong tin ve nguoi dung co the thay the ba
 
 const deleteUser = async (userID) =>{ // Xoa nguoi dung, chi su dung truoc ban V0.0.1
     try {
-        const response = await axios.delete(`http://localhost:8081/api/v1/Delete`, {
+        const response = await apiClient.delete(`http://localhost:8081/api/v1/Delete`, {
             data: { id: userID }, withCredentials: true 
         });
         return response; 
@@ -106,7 +107,7 @@ const deleteUser = async (userID) =>{ // Xoa nguoi dung, chi su dung truoc ban V
 
 const oldPasswordConfirm = async (oldpassword, userId) =>{
     try {
-        const respone = await axios.post(`http://localhost:8081/api/v1/GetoldPassword`, { oldP: oldpassword, id: userId }
+        const respone = await apiClient.post(`http://localhost:8081/api/v1/GetoldPassword`, { oldP: oldpassword, id: userId }
         );
       
         return respone.data;
@@ -117,7 +118,17 @@ const oldPasswordConfirm = async (oldpassword, userId) =>{
     }
 }
 
-
+const GetSchedule = async() =>{
+    try {
+        const respone = await apiClient.get("http://localhost:8081/api/v1/Schedule" );
+        console.log("Schedule: ",respone);
+        return respone;
+    } catch (error) {
+        console.error("Error in API call:", error);
+        toast.error("Sorry! cant take the Schedule!");
+        return;
+    }
+}
 export default {
-    loginUser, registerUser, fetchAllUser, deleteUser, editUser, oldPasswordConfirm, CreateUser,takeListClasses, Leckinfo
+    loginUser, registerUser, fetchAllUser, deleteUser, editUser, oldPasswordConfirm, CreateUser,takeListClasses, Leckinfo, GetSchedule
 }

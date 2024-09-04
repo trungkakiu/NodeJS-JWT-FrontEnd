@@ -48,10 +48,9 @@ const Login = (props) =>{
           };
       
         toast.success("Login success!");
-        sessionStorage.setItem('account', JSON.stringify(UserData));
         login(UserData.token, UserData.data);
         setTimeout(() => {
-            history.push("/");
+            history.push("/Home");
         }, 1000);
      }
      if(responesedata.EC === -105){

@@ -70,6 +70,7 @@ const HomePage = () => {
         <div className='Nav-bar'>
           <Dropdown className='bars'>
             <i className="fa-solid fa-bars"></i>
+            
           </Dropdown>
         </div>
         <div className="right-content row">
@@ -101,14 +102,41 @@ const HomePage = () => {
           </div>
           <div className="App-Header-dashborad">
             <div className="App-table">
+              {authState.data.Roleid === "SV" ? 
               <table className="table table-hover mt-5">
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>Tên lớp học phần</th>
+                  <th>Tên học phần</th>
+                  <th>Ngày đăng ký</th>
+                  <th>Giáo viên phụ trách</th>
+                  <th>Tuần học</th>
+                  <th>Ngày kết thúc</th>
+                  <th>Trạng thái</th>
+                </tr>
+              </thead>
+              <tbody>
+                {users.map((item, index) => (
+                  <tr key={index}>
+                    <td>{index + 1}</td>
+                    <td>{item.TenLop}</td>
+                    <td>{item.TenHP}</td>
+                    <td>{new Date(item.NgayBD).toLocaleDateString()}</td>
+                    <td>{item.GiaoVien}</td>
+                    <td>{item.TuanHoc}</td>
+                    <td>{new Date(item.NgayKT).toLocaleDateString()}</td>
+                    <td>{item.TrangThai}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table> : <table className="table table-hover mt-5">
                 <thead>
                   <tr>
                     <th></th>
                     <th>Tên lớp học phần</th>
                     <th>Tên học phần</th>
                     <th>Ngày đăng ký</th>
-                    <th>Giáo viên phụ trách</th>
                     <th>Tuần học</th>
                     <th>Ngày kết thúc</th>
                     <th>Trạng thái</th>
@@ -129,6 +157,8 @@ const HomePage = () => {
                   ))}
                 </tbody>
               </table>
+              }
+              
               <div className='page-paginate'>
                 {pageCount > 0 &&
                   <ReactPaginate

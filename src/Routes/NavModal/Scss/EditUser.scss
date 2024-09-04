@@ -1,0 +1,45 @@
+.EditUser-Madal{
+    background-color: rgba(255, 255, 255, 0.63);
+    padding-top: 70px;
+}
+
+.User-Avatar{
+
+    align-items: center;
+    position: relative;
+    left: 40%;
+    top:50%;
+    img{
+        margin-left: -40px;
+        width: 250px;
+        height: 200px;
+        border-radius:20px ;
+        margin-bottom: 20px;
+        transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+  
+    .avatar-edit{
+        position: relative;
+        top:50%;
+        left: -140px;
+        opacity: 0 ;
+        font-size: 43px;
+        color: rgb(210, 128, 22);
+        transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+}
+.User-Avatar:hover {
+    img{
+        opacity: 0.7;
+        transform: scale(1.1);
+    }
+    .avatar-edit{
+      opacity: 1;
+      transform: scale(1.1);
+    }
+  
+}
+.input-area {
+   
+   padding-top: 20px;
+}

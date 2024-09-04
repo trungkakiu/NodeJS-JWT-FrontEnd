@@ -16,9 +16,7 @@ import HomePage from '../HomePage/HomePage';
         <Route path="/register" exact>
          <Register/>
         </Route>
-        <Route path="/" exact>
-        <HomePage/>
-        </Route>
+        
     </Route>
     )
   }

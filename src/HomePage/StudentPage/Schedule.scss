@@ -1,0 +1,127 @@
+.Schedule-container{
+    margin-left: 271px;
+  
+    .Nav-bar{
+        height: 50px;
+        background-color:#f8f9fa;
+        max-width: 1264px;
+        width: 1264px;
+        border-bottom: 1px black dashed ;
+        position: fixed;
+        z-index: 999; 
+        margin-bottom: 20px;
+        i{
+            font-size: 35px;
+            margin-top: 7px;
+            margin-left: 10px;
+        }
+        span{
+            font-size: 28px;
+            margin-left: 15px;
+        }
+    }
+    .Schedule-contents{
+        padding-top: 50px;
+
+        .Theme-header{
+            border-radius: 15px;
+            background-color: #faf8f8; 
+            margin-left: 20px;
+            margin-top: 20px;
+            .img-header{
+                width: 1220px;
+                height: 270px;
+                object-fit: fill;
+                border-radius: 15px;
+                
+            }
+        }
+
+        .Time-card {
+            width: 1220px;
+            margin-top: 10px;
+            border-radius: 15px;
+            margin-left: 20px;
+            height: 100px;
+            background-color: #c5d7bba1;
+          
+            .span-ln {
+              display: flex;
+                margin-left: -200px;
+            }
+          
+            .Session-ln {
+              border: 2px black dashed;
+              width: 200px;
+              margin-top: 20px;
+              font-weight: 500;
+              padding: 15px; 
+              border-radius: 15px;
+             
+            }
+            .Week-ln {
+                border: 2px black dashed;
+                width: 400px;
+                margin-top: 20px;
+                font-weight: 500;
+                padding: 15px; 
+                border-radius: 15px;
+                margin-left: 10px;
+              }
+            .Year-ln {
+               
+                border-radius: 15px;
+                border: 2px black dashed;
+                margin-top: 20px;
+                padding: 15px; 
+                width: 200px;
+                margin-left: 400px;
+                font-weight: 500;
+                margin-right: 10px; 
+                align-items: center;
+            }
+          }
+
+          .day {
+            width: 1220px;
+            height: 120px;
+            border-radius: 15px;
+            margin-top: 30px;
+            text-align: center;
+            font-size: 18px;
+            background-image: linear-gradient(to right, #5fefff, #83d878);
+            font-weight: 550;
+            margin-left: 20px;
+            cursor: pointer;
+            transition: transform 0.3s ease, font-size 0.2s ease;
+        }
+        
+        .day:hover {
+            transform: scale(1.01);
+            font-size: 19px;
+            background-image: linear-gradient(to left, #5fefff, #83d878);
+        }
+        
+        .day-now{
+            width: 1220px;
+            text-align: center;
+            font-size: 18px;
+            height: 120px;
+            font-weight: 550;
+            background-image: linear-gradient(to right, #d3f769, #f4b247);
+            border-radius: 15px;
+            margin-top: 30px;
+            margin-left: 20px;
+        
+            cursor: pointer;
+            transition: transform 0.3s ease ,font-size 0.2s ease;
+        }
+        .day-now:hover {
+            transform: scale(1.01)  ;
+            font-size: 19px ;
+            
+            background-color: rgb(224, 231, 124) ;
+        }
+    }
+    
+}
