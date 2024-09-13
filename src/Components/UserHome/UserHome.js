@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import RouteApi from '../../Service/RouteApi';
-import ReactPaginate from "https://cdn.skypack.dev/react-paginate@7.1.3";
+import ReactPaginate from 'react-paginate';
 import DeleteConfirmModal from '../Modal/DeleteModal';
 import EditUserModal from '../Modal/EditUserModal'
 import CreateUserModal from '../Modal/CreateUserModal'

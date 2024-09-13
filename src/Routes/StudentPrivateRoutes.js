@@ -9,7 +9,7 @@ import { AuthContext } from '../Context/Authenticate-context';
 const PrivateRoutes = ({ path, component }) => {
   const { authState } = useContext(AuthContext); 
 
-  if (authState && authState.isAuthenticate) {
+  if (authState && authState.isAuthenticate && authState.data.Roleid === 'SV') {
     return <Route path={path} component={component} />;
   } else {
     return <Redirect to="/Login" />;

@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext, } from 'react';
 import UserHome from '../src/Components/UserHome/UserHome';
-import PrivateRoutes from './Routes/PrivateRoutes';
+import StudentPrivateRoutes from './Routes/StudentPrivateRoutes';
 import PublicRoutes from './Routes/PublicRoutes';
 import Nav from './Routes/SvNav/Nav'; 
 import GvNav from './Routes/GvNav/GvNav'
@@ -70,8 +70,8 @@ function App() {
           <div>
             {authState.isAuthenticate && (
               <>
-                <PrivateRoutes path={'/Home'} component={HomePage} />
-                <PrivateRoutes path={'/Schedule'} component={Schedule} />
+                <StudentPrivateRoutes path={'/Home'} component={HomePage} />
+                <StudentPrivateRoutes path={'/Schedule'} component={Schedule} />
               </>
             )}
           </div>
@@ -99,7 +99,7 @@ function App() {
             {authState.isAuthenticate && (
               <>
                
-                <PrivateRoutes path={'/Home'} component={HomePage} />
+                <StudentPrivateRoutes path={'/Home'} component={HomePage} />
               </>
             )}
           

@@ -5,14 +5,13 @@ import { useState, useEffect } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import RouteApi from '../../Service/RouteApi';
-import { forEach } from 'lodash';
 
 const Schedule = () => {
   const currentDate = new Date();
   const daysOfWeek = ['Chủ Nhật', 'Thứ Hai', 'Thứ Ba', 'Thứ Tư', 'Thứ Năm', 'Thứ Sáu', 'Thứ Bảy'];
   const currentDay = daysOfWeek[currentDate.getDay()];
-  const [currentWeek, setCurrentWeek] = useState();
-  const [ApiResponse, setApiResponse] = useState();
+  
+  const [currentWeek, setCurrentWeek] = useState('');
   const [ListOfDay, setListOfDay] = useState([]);
   const [activeDay, setActiveDay] = useState({
     Monday: false,
@@ -23,6 +22,7 @@ const Schedule = () => {
     Saturday: false,
     Sunday: false,
   });
+
   const [Mondaydata, SetMondayData] = useState();
   const [TuesDayData, SetTuesDayData] = useState();
   const [WednesdayData, SetWednesdayData] = useState();
@@ -30,11 +30,11 @@ const Schedule = () => {
   const [FridayData, SetFridayData] = useState();
   const [SaturdayData, SetSaturdayData] = useState();
   const [SundayData, SetSundayData] = useState();
-  const [scheduleData, setScheduleData] = useState(null);
+  const [Weekdata, SetWeekdata] = useState(null);
 
   useEffect(() => {
-    checkingday();
-    TakeSchedule();
+    TakeSchedule();  
+    checkingday(); 
   }, []);
 
   const checkingday = () => {
@@ -68,43 +68,46 @@ const Schedule = () => {
   const TakeSchedule = async () => {
     try {
       let schedule = await RouteApi.GetSchedule();
-      setScheduleData(schedule.data.ED); 
-      const currentWeek = findCurrentWeek(schedule.data.ED); 
-      if (currentWeek) {
-        setCurrentWeek(currentWeek.week)
-      
+      if (schedule) {
+        const currentWeek = findCurrentWeek(schedule.data.ED);
+        if (!currentWeek) {
+          toast.error('Không tìm thấy tuần học hiện tại!');
+          return;
+        }
+        SetWeekdata(currentWeek);  // Store the fetched week data in state
+        setCurrentWeek(currentWeek.week);
         setListOfDay(currentWeek.schedule);
-    
-        
-        ListOfDay.forEach(item => {
-          if(item.NgayHoc){
-            if(item.NgayHoc === '2'){
-              SetMondayData(item)
-            }
-            if(item.NgayHoc === '3'){
-              SetTuesDayData(item)
-            }
-            if(item.NgayHoc === '4'){
-              SetSaturdayData(item)
-            }
-            if(item.NgayHoc === '5'){
-              SetThursdayData(item)
-            }
-            if(item.NgayHoc === '6'){
-              SetFridayData(item)
-            }
-            if(item.NgayHoc === '7'){
-              SetSaturdayData(item)
-            }
-            SetSundayData('');
+
+        currentWeek.schedule.forEach(item => {
+          switch (item.NgayHoc) {
+            case '2':
+              SetMondayData(item);
+              break;
+            case '3':
+              SetTuesDayData(item);
+              break;
+            case '4':
+              SetWednesdayData(item);
+              break;
+            case '5':
+              SetThursdayData(item);
+              break;
+            case '6':
+              SetFridayData(item);
+              break;
+            case '7':
+              SetSaturdayData(item);
+              break;
+            default:
+              SetSundayData('');
+              break;
           }
-        })
-       
+        });
       } else {
-        console.log('Không tìm thấy tuần hiện tại.');
+        toast.error('Không thể lấy lịch trình!');
       }
     } catch (error) {
-      console.error(error);
+      console.log(error);
       toast.error('Không thể lấy lịch trình!');
     }
   };
@@ -130,7 +133,6 @@ const Schedule = () => {
         return item;
       }
     }
-
     return null;
   };
 
@@ -154,203 +156,38 @@ const Schedule = () => {
               <div className="Week-ln">Tuần Học: {currentWeek}</div>
             </span>
           </div>
-          <span className="Span-studies">
-          <div className={activeDay.Monday ? 'day-now' : 'day'}>
-            {activeDay.Monday ? <div>
-              <i class="fa-solid fa-thumbtack"></i>
-            </div> : ''}
-              <div className='DayTag'>
-               Monday (Thứ Hai):
-              </div>
-              <span className='Data-Tag'>
-              {Mondaydata ? <>
-                <div>
-                {Mondaydata.TenHP}
-                </div>
-                <div>
-                Phòng Học: {Mondaydata.PhongHoc}
-                </div>
-                <div>
-                Tiết: {Mondaydata.Tiet}
-                </div>
-              </> : <>
-              <div>
-                {activeDay.Monday ? "Hôm nay không có lịch học, bạn rảnh!" : "Hiện bạn không có lịch học"}
-              </div>
-              </> }
-              </span>
-           </div>
-          </span>
-          <span className="Span-studies">
-          <div className={activeDay.Tuesday ? 'day-now' : 'day'}>
-           {activeDay.Tuesday ? <div>
-              <i class="fa-solid fa-thumbtack"></i>
-            </div> : ''}
-              <div className='DayTag'>
-               Tuesday (Thứ Ba):
-              </div>
-              <span className='Data-Tag'>
-              {TuesDayData ? <>
-                <div>
-                {TuesDayData.TenHP}
-                </div>
-                <div>
-                Phòng Học: {TuesDayData.PhongHoc}
-                </div>
-                <div>
-                Tiết: {TuesDayData.Tiet}
-                </div>
-              </> : <>
-              <div>
-                {activeDay.Tuesday ? "Hôm nay không có lịch học, bạn rảnh!" : "Hiện bạn không có lịch học"}
-              </div>
-              </> }
-              </span>
-           </div>
-          </span>
-          <span className="Span-studies">
-          <div className={activeDay.Wednesday ? 'day-now' : 'day'}>
-            {activeDay.Wednesday ? <div>
-              <i class="fa-solid fa-thumbtack"></i>
-            </div> : ''}
-              <div className='DayTag'>
-               Wednesday (Thứ Tư):
-              </div>
-              <span className='Data-Tag'>
-              {WednesdayData ? <>
-                <div>
-                 {WednesdayData.TenHP}
-                </div>
-                <div>
-                Phòng Học: {WednesdayData.PhongHoc}
-                </div>
-                <div>
-                Tiết: {WednesdayData.Tiet}
-                </div>
-                
-              </> : <>
-              <div>
-                {activeDay.Wednesday ? "Hôm nay không có lịch học, bạn rảnh!" : "Hiện bạn không có lịch học"}
-              </div>
-              </> }
-              </span>
-           </div>
-          </span>
-          <span className="Span-studies">
-          <div className={activeDay.Thursday ? 'day-now' : 'day'}>
-           {activeDay.Thursday ? <div>
-              <i class="fa-solid fa-thumbtack"></i>
-            </div> : ''}
-              <div className='DayTag'>
-               Thursday (Thứ Năm):
-              </div>
-              <span className='Data-Tag'>
-              {ThursdayData ? <>
-                <div>
-                {ThursdayData.TenHP}
-                </div>
-                <div>
-                Phòng Học: {ThursdayData.PhongHoc}
-                </div>
-                <div>
-                Tiết: {ThursdayData.Tiet}
-                </div>
-                
-              </> : <>
-              <div>
-                {activeDay.Thursday ? "Hôm nay bạn rảnh!" : "Hiện bạn không có lịch học"}
-              </div>
-              </> }
-              </span>
-           </div>
-          </span>
-          <span className="Span-studies">
-          <div className={activeDay.Friday ? 'day-now' : 'day'}>
-            {activeDay.Friday ? <div>
-              <i class="fa-solid fa-thumbtack"></i>
-            </div> : ''}
-              <div className='DayTag'>
-               Friday (Thứ Sáu):
-              </div>
-              <span className='Data-Tag'>
-              {FridayData ? <>
-                <div>
-                {FridayData.TenHP}
-                </div>
-                <div>
-                Phòng Học: {FridayData.PhongHoc}
-                </div>
-                <div>
-                Tiết: {FridayData.Tiet}
-                </div>
-                
-              </> : <>
-              <div>
-                {activeDay.Friday ? "Hôm nay bạn rảnh!" : "Hiện bạn không có lịch học"}
-              </div>
-              </> }
-              </span>
-           </div>
-          </span>
-          <span className="Span-studies">
-          <div className={activeDay.Friday ? 'day-now' : 'day'}>
-            {activeDay.Saturday ? <div>
-              <i class="fa-solid fa-thumbtack"></i>
-            </div> : ''}
-              <div className='DayTag'>
-               Saturday (Thứ Bảy):
-              </div>
-              <span className='Data-Tag'>
-              {SaturdayData ? <>
-                <div>
-                {SaturdayData.TenHP}
-                </div>
-                <div>
-                Phòng Học: {SaturdayData.PhongHoc}
-                </div>
-                <div>
-                Tiết: {SaturdayData.Tiet}
-                </div>
-              </> : <>
-              <div>
-                {activeDay.Saturday ? "Hôm nay không có lịch học, bạn rảnh!" : "Hiện bạn không có lịch học"}
-              </div>
-              </> }
-              </span>
-           </div>
-          </span>
-          <span className="Span-studies">
-          <div className={activeDay.Sunday ? 'day-now' : 'day'}>
-            {activeDay.Saturday ? <div>
-              <i class="fa-solid fa-thumbtack"></i>
-            </div> : ''}
-              <div className='DayTag'>
-               Sunday (Chủ Nhật):
-              </div>
-              <span className='Data-Tag'>
-              {SundayData ? <>
-                <div>
-                {SundayData.TenHP}
-                </div>
-                <div>
-                Phòng Học: {SundayData.PhongHoc}
-                </div>
-                <div>
-                Tiết: {SundayData.Tiet}
-                </div>
-              </> : <>
-              <div>
-                {activeDay.Sunday ?  "Hôm nay không có lịch học, bạn rảnh!" : "Hiện bạn không có lịch học"}
-              </div>
-              </> }
-              </span>
-           </div>
-          </span>
+          <div className="Schedule-entries">
+            <DayEntry title="Monday" active={activeDay.Monday} data={Mondaydata} />
+            <DayEntry title="Tuesday" active={activeDay.Tuesday} data={TuesDayData} />
+            <DayEntry title="Wednesday" active={activeDay.Wednesday} data={WednesdayData} />
+            <DayEntry title="Thursday" active={activeDay.Thursday} data={ThursdayData} />
+            <DayEntry title="Friday" active={activeDay.Friday} data={FridayData} />
+            <DayEntry title="Saturday" active={activeDay.Saturday} data={SaturdayData} />
+            <DayEntry title="Sunday" active={activeDay.Sunday} data={SundayData} />
+          </div>
         </div>
       </div>
       <ToastContainer />
     </>
   );
 };
+
+const DayEntry = ({ title, active, data }) => (
+  <div className={active ? 'day-now' : 'day'}>
+    {active && <div><i className="fa-solid fa-thumbtack"></i></div>}
+    <div className="DayTag">{title}:</div>
+    <span className="Data-Tag">
+      {data ? (
+        <>
+          <div>{data.TenHP}</div>
+          <div>Phòng Học: {data.PhongHoc}</div>
+          <div>Tiết: {data.Tiet}</div>
+        </>
+      ) : (
+        <div>{active ? "Hôm nay không có lịch học, bạn rảnh!" : "Hiện bạn không có lịch học"}</div>
+      )}
+    </span>
+  </div>
+);
 
 export default Schedule;

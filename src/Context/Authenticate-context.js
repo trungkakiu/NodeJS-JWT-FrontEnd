@@ -1,69 +1,122 @@
 import React, { createContext, useState, useEffect } from 'react';
 import RouteApi from '../Service/RouteApi';
 
-export const AuthContext = createContext({ name: '', auth: false });
+export const AuthContext = createContext({});
 
 export const AuthProvider = ({ children }) => {
   const [authState, setAuthState] = useState(() => {
     const savedAuthState = sessionStorage.getItem('authState');
-    return savedAuthState
-      ? JSON.parse(savedAuthState)
-      : {
-          isLoading: true,
-          isAuthenticate: false,
-          token: null,
-          data: {},
-        };
+    try {
+      return savedAuthState
+        ? JSON.parse(savedAuthState)  
+        : {
+            isLoading: true,
+            isAuthenticate: false,
+            token: null,
+            data: {},
+          };
+    } catch (error) {
+      console.error('Error parsing authState from sessionStorage:', error);
+      return {
+        isLoading: true,
+        isAuthenticate: false,
+        token: null,
+        data: {},
+      };
+    }
   });
+  
+  const saveAuthState = (newState) => {
+    setAuthState(newState);
+    sessionStorage.setItem('authState', JSON.stringify(newState));
+    sessionStorage.setItem('Token', newState.token);
+  };
 
   const login = (token, userData) => {
     const newAuthState = {
       isAuthenticate: true,
       token,
       data: userData,
-      isLoading: false, 
+      isLoading: false,
     };
-    setAuthState(newAuthState);
-    sessionStorage.setItem('authState', JSON.stringify(newAuthState));
-    sessionStorage.setItem('Token', newAuthState.token);
+    saveAuthState(newAuthState);
   };
 
   const logout = () => {
     const newAuthState = {
       isAuthenticate: false,
-      token: '',
+      token: null,
       data: {},
       isLoading: false,
     };
     setAuthState(newAuthState);
-    sessionStorage.removeItem('authState');
+    sessionStorage.clear();
+    localStorage.removeItem('currentWeek');
+    localStorage.removeItem('scheduleData');
   };
 
-  const takeinfo = async () => {
+  const AvatarChange = async (newAvatarName) => {
+    try {
+      // Cập nhật authState trước
+      setAuthState((prev) => {
+        const updatedState = {
+          ...prev,
+          data: {
+            ...prev.data,
+            Avatar: newAvatarName
+          }
+        };
+        return updatedState;
+      });
+
+      setTimeout(() => {
+        const updatedAuthState = {
+          ...authState,
+          data: {
+            ...authState.data,
+            Avatar: newAvatarName
+          }
+        };
+        sessionStorage.setItem('authState', JSON.stringify(updatedAuthState));
+      }, 0);
   
-    setAuthState((prevState) => ({ ...prevState, isLoading: true }));
+    } catch (error) {
+      console.error('Error during avatar change:', error);
+    }
+  };
+  
+  const fetchUserInfo = async () => {
+    try {
+      setAuthState((prev) => ({ ...prev, isLoading: true }));
       const info = await RouteApi.Leckinfo();
-      if (info && info.EC === 0) {
-        const data = {
-          isLoading: false, 
+      if (info?.EC === 0) {
+        const userData = info.ED.data;
+        userData.Avatar = userData.Avatar;
+        saveAuthState({
+          isLoading: false,
           isAuthenticate: true,
           token: info.ED.token,
-          data: info.ED.data,
-        };
-        setAuthState(data);
+          data: userData,
+        });
       } else {
-        setAuthState((prevState) => ({ ...prevState, isLoading: false }));
+        setAuthState((prev) => ({ ...prev, isLoading: false }));
       }
+    } catch (error) {
+      setAuthState((prev) => ({ ...prev, isLoading: false }));
+    }
   };
 
   useEffect(() => {
-    takeinfo();
+    const excludedRoutes = ['/', '/login', '/register'];
+    if (!excludedRoutes.includes(window.location.pathname)) {
+      fetchUserInfo();
+    } else {
+      setAuthState((prev) => ({ ...prev, isLoading: false }));
+    }
   }, []);
 
-  const getAuthState = () => authState;
-
   return (
-    <AuthContext.Provider value={{ authState, login, logout, getAuthState }}>
+    <AuthContext.Provider value={{ authState, login, logout ,AvatarChange }}>
       {children}
     </AuthContext.Provider>
   );

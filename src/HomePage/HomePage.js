@@ -4,6 +4,7 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import '../HomePage/HomePage.scss';
+import CryptoJS from 'crypto-js';
 import RouteApi from '../Service/RouteApi';
 import slide1 from '../HomePage/Scrourcedata/Sự kết nối kỳ diệu.jpg';
 import slide2 from '../HomePage/Scrourcedata/👆🤓.png';
@@ -13,10 +14,13 @@ import slide5 from '../HomePage/Scrourcedata/tingg.jpg';
 import slide6 from '../HomePage/Scrourcedata/vit ngoc.jpg';
 import slide7 from '../HomePage/Scrourcedata/đấm meme.jpg';
 import { Dropdown } from 'react-bootstrap';
-import ReactPaginate from "react-paginate";
+import ReactPaginate from 'react-paginate';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { AuthContext } from '../Context/Authenticate-context';
+import DangKyTinChi from '../Components/DangKyTinChi/DangKyTinChi';
+import DangkytinchiApi from '../Service/DangkytinchiApi'
+
 
 const HomePage = () => {
   const { authState } = useContext(AuthContext);
@@ -39,10 +43,10 @@ const HomePage = () => {
     setCurrentPage(event.selected + 1);
   };
 
+
   const fetchClasses = async () => {
     try {
       let data = await RouteApi.takeListClasses();
-      console.log("fecthdata: ",data);
       if (data && data.data.ED && data.data.EC === 0) {
         if (Array.isArray(data.data.ED)) {
           setUsers(data.data.ED);
@@ -59,18 +63,39 @@ const HomePage = () => {
     }
   };
 
+  const generateMD5Hash = (data) => {
+    return CryptoJS.MD5(data).toString();
+  };
+  const getxlsx = async() =>{
+    try {
+        const txtUserName = 'DTC225200152';
+        const txtPassword = generateMD5Hash('07/05/2004');
+        let response = await DangkytinchiApi(txtUserName,txtPassword);
+        console.log("Dktc response: ", response);
+        if(response) {
+            console.log("Dktc response: ", response);
+        }else{
+            console.log("Khong lay duoc thong tin roi :))")
+        }
+    } catch (error) {
+        console.log("Loi server roi nhe :))")
+        console.log(error)
+    }
+  }
   useEffect(() => {
     fetchClasses();
   }, []);
 
 
+
+  
   return (
     <>
       <div className="app-container">
         <div className='Nav-bar'>
           <Dropdown className='bars'>
             <i className="fa-solid fa-bars"></i>
-            
+            <button onClick={getxlsx} className='btn btn-secondary'>Get</button>
           </Dropdown>
         </div>
         <div className="right-content row">

@@ -81,7 +81,7 @@
         img{
           width: 60px;
           height: 60px;
-          border-radius: 50%;
+          border-radius: 15px;
           margin-left: 20px;
           margin-top: 14px;
           background-color: #85ccdbd3;
@@ -98,13 +98,11 @@
             border-radius: 15px;
             display: flex;
             flex-direction: column;
-            background-color: #b9ecf5;
             position: relative;
             .top-statement {
               cursor: pointer;
               transition: opacity 0.1s ease;
             }
-            
             .Name{
             
               font-weight: 550;

@@ -11,7 +11,8 @@ import Userinfo from '../NavModal/Userinfo';
 
 
 const Nav = ({ userinfo }) => {
-  const { authState } = useContext(AuthContext);
+  const { authState, AvatarChange } = useContext(AuthContext);
+  const [avatarPreview, setAvatarPreview] = useState(authState.data.Avatar || beelogo);
   const [modalUp, setmodalUp] = useState(false);
   const [datamodal, setdatamodal] = useState({});
   const data = {
@@ -41,7 +42,7 @@ const Nav = ({ userinfo }) => {
           <p>Version V0.0.1</p>
         </div>
       </div>
-
+     
       <div className='App-dashboard'>
         <div  className='children-dashboard' activeClassName="active">
         <NavLink to="/Home">

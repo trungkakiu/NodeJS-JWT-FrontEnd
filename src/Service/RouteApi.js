@@ -69,7 +69,6 @@ const takeListClasses  = async () => { // lay thong tin ve lop hoc phan cua nguo
         const response = await apiClient.get("http://localhost:8081/api/v1/Readclasse", {
             withCredentials: true
         });
-        console.log("classlist: ", response)
         return response;
     } catch (error) {
         console.log(error);
@@ -83,7 +82,6 @@ const Leckinfo = async () => { // lay thong tin ve nguoi dung co the thay the ba
         const response = await apiClient.get("http://localhost:8081/api/v1/infomation", {
             withCredentials: true
         });
-        console.log("leckinfo: ", response)
         return response;
     } catch (error) {
         console.log(error);
@@ -129,6 +127,36 @@ const GetSchedule = async() =>{
         return;
     }
 }
+
+const AvatarChage = async(formData) =>{
+    try {
+        const respone =  await axios.post('http://localhost:8081/api/v1/AvatarChange', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            },
+            withCredentials: true
+        });
+        return respone;
+    } catch (error) {
+        console.error("Error in API call:", error);
+        toast.error("Sorry! cant chageavatar!");
+        return;
+    }
+}
+
+const LogoutRequest = async() =>{
+    try {
+        const respone = await apiClient.post("http://localhost:8081/api/v1/Logout");
+        console.log("Schedule: ",respone);
+        return respone;
+    } catch (error) {
+        console.error("Error in API call:", error);
+        toast.error("Sorry! cant logout right now!");
+        return;
+    }
+}
 export default {
-    loginUser, registerUser, fetchAllUser, deleteUser, editUser, oldPasswordConfirm, CreateUser,takeListClasses, Leckinfo, GetSchedule
+    loginUser, registerUser, fetchAllUser, deleteUser, 
+    editUser, oldPasswordConfirm, CreateUser,takeListClasses,
+     Leckinfo, GetSchedule, AvatarChage, LogoutRequest
 }

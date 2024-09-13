@@ -81,7 +81,7 @@
         img{
           width: 60px;
           height: 60px;
-          border-radius: 50%;
+          border-radius: 15px;
           margin-left: 20px;
           margin-top: 14px;
           background-color: #85ccdbd3;
@@ -212,6 +212,38 @@
         .Schedule:hover {
           background-color: #b9ecf5 
         } 
+      }
+      .He-Thong{
+        p{
+          margin-top: 40px;
+          font-size: 18px;
+          margin-left: 20px;
+          font-weight: 450;
+        }
+        .logout-span{
+          width: 250px;
+          height: 60px;
+          background-color: #63636336;
+          display: flex;
+          transition:   background-color 0.3s ease;
+          border-radius: 15px;
+          margin-left: 10px;
+          padding-bottom: 20px;
+          text-decoration: none !important;
+          align-items: center;
+
+          .logout-contents{
+            margin-left: 37px;
+            margin-top: 18px;
+            font-size: 20px;
+            i{
+              margin-right: 10px;
+            }
+          }
+        }
+        .logout-span:hover {
+          background-color: #b9ecf5 
+        }
       }
     }
   }
